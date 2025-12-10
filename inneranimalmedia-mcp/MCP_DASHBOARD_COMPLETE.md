@@ -25,7 +25,8 @@ Run these commands to add secrets:
 cd /Users/samprimeaux/Downloads/cloudflare-mcp-worker/inneranimalmedia-mcp
 
 # Add GitHub PAT
-echo "YOUR_GITHUB_PAT_HERE" | wrangler secret put GITHUB_TOKEN --env=production
+# echo "YOUR_GITHUB_PAT_HERE" | wrangler secret put GITHUB_TOKEN --env=production
+# (Replace YOUR_GITHUB_PAT_HERE with your actual GitHub Personal Access Token)
 
 # Add Cloudflare API Token  
 wrangler secret put CLOUDFLARE_API_TOKEN --env=production
