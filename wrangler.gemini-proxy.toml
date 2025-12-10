@@ -1,0 +1,38 @@
+# Gemini API Proxy Worker
+# Ultimate SaaS optimization: Secure, cached, rate-limited Gemini API proxy
+
+name = "gemini-proxy"
+main = "src/gemini-proxy-worker.ts"
+compatibility_date = "2024-11-24"
+compatibility_flags = ["nodejs_compat"]
+
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Routes
+# Deployed to: gemini-proxy.meauxbility.workers.dev
+# Custom domains:
+# - https://inneranimalmedia.com/api/gemini/*
+# - https://www.inneranimalmedia.com/api/gemini/*
+# - https://meauxbility.org/api/gemini/*
+# - https://www.meauxbility.org/api/gemini/*
+
+# KV Namespaces for caching and rate limiting
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "eed27546297b4b51b0a6e117d3316d3c"  # Reuse existing cache KV
+
+[[kv_namespaces]]
+binding = "KV_RATE_LIMIT"
+id = "30bb5e34cf2044e5ae2d526c8e0122e6"
+
+[[kv_namespaces]]
+binding = "KV_ANALYTICS"
+id = "6b362b78a91b406b91381ef91ee11c1b"
+
+# Environment Variables
+[vars]
+CLOUDFLARE_ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+ENVIRONMENT = "production"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# - GEMINI_API_KEY (Gemini API key from Google AI Studio)

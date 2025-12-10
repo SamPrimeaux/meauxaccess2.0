@@ -1,0 +1,43 @@
+{
+  "rewrites": [
+    {
+      "source": "/mcp/:path*",
+      "destination": "https://meauxmcp.meauxbility.workers.dev/mcp/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://meauxmcp.meauxbility.workers.dev/api/:path*"
+    },
+    {
+      "source": "/iaccess",
+      "destination": "https://meauxmcp.meauxbility.workers.dev/iaccess"
+    },
+    {
+      "source": "/health",
+      "destination": "https://meauxmcp.meauxbility.workers.dev/health"
+    },
+    {
+      "source": "/",
+      "destination": "https://meauxmcp.meauxbility.workers.dev/"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+}

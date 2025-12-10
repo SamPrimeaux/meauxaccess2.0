@@ -1,0 +1,57 @@
+name = "inneranimalmedia-router"
+main = "src/index.ts"
+compatibility_date = "2024-12-09"
+compatibility_flags = ["nodejs_compat"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Environment Variables
+[vars]
+ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+PAGES_DEV_ORIGIN = "https://inner-animal-media.pages.dev"
+
+# Production Environment
+[env.production]
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# R2 Bucket Binding for Dashboard (in production)
+[[env.production.r2_buckets]]
+binding = "R2_IACCESS"
+bucket_name = "iaccess"
+
+[env.production.vars]
+ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+PAGES_DEV_ORIGIN = "https://inner-animal-media.pages.dev"
+
+# Observability Configuration
+# Note: Observability settings are configured via Cloudflare Dashboard
+# or via API. The JSON config you provided:
+# {
+#   "observability": {
+#     "enabled": false,
+#     "head_sampling_rate": 1,
+#     "logs": {
+#       "enabled": true,
+#       "head_sampling_rate": 1,
+#       "persist": true,
+#       "invocation_logs": true
+#     },
+#     "traces": {
+#       "enabled": false,
+#       "persist": true,
+#       "head_sampling_rate": 1
+#     }
+#   }
+# }
+# 
+# To apply: Go to Worker Settings > Observability tab in Cloudflare Dashboard
+
+# Custom Domain Routes (configured via API token)
+[[env.production.routes]]
+pattern = "inneranimalmedia.com/*"
+zone_id = "0bab48636c1be4ea61c0c7787c3e"
+
+[[env.production.routes]]
+pattern = "www.inneranimalmedia.com/*"
+zone_id = "0bab48636c1be4ea61c0c7787c3e"

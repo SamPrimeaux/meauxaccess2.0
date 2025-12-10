@@ -1,0 +1,28 @@
+name = "inneranimalmedia-mcp"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[env.production]
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+zone_id = "0bab48636c1bea4be4ea61c0c7787c3e"
+
+[env.production.vars]
+CLOUDFLARE_ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+PRIMARY_ZONE_ID = "0bab48636c1bea4be4ea61c0c7787c3e"
+PRIMARY_ZONE_NAME = "inneranimalmedia.com"
+
+# Add your R2 buckets here
+# [[r2_buckets]]
+# binding = "R2_ASSETS"
+# bucket_name = "your-bucket-name"
+
+# Add your D1 databases here
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "your-database"
+# database_id = "your-database-id"
+
+# Add your KV namespaces here
+# [[kv_namespaces]]
+# binding = "KV_CONFIG"
+# id = "your-kv-id"

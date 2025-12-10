@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MeauxLearn - Advanced Cloud & Nonprofit Tech Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root[data-theme="light"] {
+            /* Light Theme */
+            --primary: #FF6B35;
+            --primary-dark: #E5522D;
+            --primary-light: #FF8A5C;
+            --secondary: #004E89;
+            --accent: #10B981;
+            --accent-dark: #059669;
+
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: #F3F4F6;
+            --bg-card: #FFFFFF;
+            --bg-hover: #F9FAFB;
+
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        :root[data-theme="dark"] {
+            /* Dark Theme */
+            --primary: #FF6B35;
+            --primary-dark: #E5522D;
+            --primary-light: #FF8A5C;
+            --secondary: #0EA5E9;
+            --accent: #10B981;
+            --accent-dark: #059669;
+
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --bg-card: #1E293B;
+            --bg-hover: #334155;
+
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        :root[data-theme="customize"] {
+            /* Customize Theme - User can customize colors */
+            --primary: #FF6B35;
+            --primary-dark: #E5522D;
+            --primary-light: #FF8A5C;
+            --secondary: #0EA5E9;
+            --accent: #10B981;
+            --accent-dark: #059669;
+
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --bg-card: #1E293B;
+            --bg-hover: #334155;
+
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-top: 0;
+            /* No header padding since we're using MeauxMCP header */
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--primary) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, var(--accent) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: patternMove 60s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(50px, 50px) rotate(360deg);
+            }
+        }
+
+        /* Theme Toggle - Positioned in top right, below MeauxMCP header */
+        .theme-controls {
+            position: fixed;
+            top: 80px;
+            right: 1.5rem;
+            z-index: 100;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 56px;
+            height: 28px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [data-theme="light"] .theme-toggle-slider {
+            transform: translateX(28px);
+        }
+
+        [data-theme="customize"] .theme-toggle-slider {
+            transform: translateX(28px);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .theme-select {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-select:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Chart Cards */
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .chart-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .chart-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Course Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .course-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .course-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .course-card:hover::after {
+            opacity: 1;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px var(--shadow-lg);
+        }
+
+        .course-icon {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-icon svg {
+            width: 80px;
+            height: 80px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            position: relative;
+            z-index: 2;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .course-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .course-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .course-progress {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-tertiary);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        /* Section Header */
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .theme-controls {
+                top: 70px;
+                right: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Theme Controls - Positioned below MeauxMCP header -->
+    <div class="theme-controls">
+        <select class="theme-select" id="themeSelect">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="customize">Customize</option>
+        </select>
+        <div class="theme-toggle" id="themeToggle">
+            <div class="theme-toggle-slider">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" id="themeIcon">
+                    <circle cx="7" cy="7" r="4" fill="white" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card animate-fade-in delay-1">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" data-target="8">0</div>
+                        <div class="stat-label">Active Courses</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(255, 107, 53, 0.1); color: var(--primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" />
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>+2 new courses</span>
+                </div>
+            </div>
+
+            <div class="stat-card animate-fade-in delay-2">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21"
+                                stroke="currentColor" stroke-width="2" />
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            <path d="M23 21V19C23 17.1362 21.7252 15.5701 20 15.126" stroke="currentColor"
+                                stroke-width="2" />
+                            <path d="M16 3.12598C17.7252 3.56986 19 5.13616 19 7C19 8.86384 17.7252 10.4301 16 10.874"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>+18% this month</span>
+                </div>
+            </div>
+
+            <div class="stat-card animate-fade-in delay-3">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value">94%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>+3% improvement</span>
+                </div>
+            </div>
+
+            <div class="stat-card animate-fade-in delay-4">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value">$42K</div>
+                        <div class="stat-label">Grant Revenue</div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2V6M12 18V22M6 12H2M22 12H18" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="3" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>$12K this quarter</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Chart -->
+        <div class="chart-card animate-fade-in">
+            <div class="chart-header">
+                <h3 class="chart-title">Learning Progress Analytics</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active">7D</button>
+                    <button class="chart-btn">30D</button>
+                    <button class="chart-btn">90D</button>
+                    <button class="chart-btn">1Y</button>
+                </div>
+            </div>
+            <canvas id="progressChart" height="80"></canvas>
+        </div>
+
+        <!-- Section Header -->
+        <div class="section-header">
+            <h2 class="section-title">Course Catalog</h2>
+            <p class="section-desc">Master cloud infrastructure, AI automation, and nonprofit grant strategies</p>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="courses-grid">
+            <!-- Course 1: Cloudflare Essentials -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #FF6B35, #E5522D);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="30" fill="white" opacity="0.15" />
+                        <path d="M40 20L30 30H35V45H45V30H50L40 20Z" fill="white" />
+                        <rect x="28" y="50" width="24" height="4" rx="2" fill="white" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(255, 107, 53, 0.1); color: var(--primary);">Fundamentals</span>
+                    <h3 class="course-title">Cloudflare Essentials</h3>
+                    <p class="course-desc">Master DNS, CDN, SSL/TLS, WAF, and security fundamentals for production
+                        deployments.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="65"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            4 weeks
+                        </div>
+                        <span class="course-progress">65% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 2: Workers & Edge Computing -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #004E89, #003A66);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <rect x="20" y="30" width="40" height="30" rx="4" fill="white" opacity="0.15" />
+                        <path d="M30 40H50M30 45H50M30 50H45" stroke="white" stroke-width="3" stroke-linecap="round" />
+                        <circle cx="40" cy="20" r="5" fill="white" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(0, 78, 137, 0.1); color: var(--secondary);">Advanced</span>
+                    <h3 class="course-title">Workers & Serverless</h3>
+                    <p class="course-desc">Build edge applications with Workers, D1, R2, KV, and Durable Objects.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="42"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            6 weeks
+                        </div>
+                        <span class="course-progress">42% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 3: AutoRAG Training -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #6B46C1, #553C9A);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="25" r="8" fill="white" />
+                        <circle cx="25" cy="50" r="8" fill="white" opacity="0.7" />
+                        <circle cx="55" cy="50" r="8" fill="white" opacity="0.7" />
+                        <path d="M40 33L25 42M40 33L55 42" stroke="white" stroke-width="2.5" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label" style="background: rgba(107, 70, 193, 0.1); color: #6B46C1;">AI/ML</span>
+                    <h3 class="course-title">AutoRAG Training</h3>
+                    <p class="course-desc">Train and deploy RAG systems with Claude, OpenAI, and Gemini on Cloudflare
+                        Workers.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="0"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            5 weeks
+                        </div>
+                        <span class="course-progress">Start →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 4: Worker Pipelines -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <rect x="15" y="25" width="15" height="15" rx="3" fill="white" />
+                        <rect x="35" y="25" width="15" height="15" rx="3" fill="white" opacity="0.7" />
+                        <rect x="55" y="25" width="15" height="15" rx="3" fill="white" opacity="0.5" />
+                        <path d="M30 32H35M50 32H55" stroke="white" stroke-width="2" stroke-linecap="round" />
+                        <path d="M40 45V50M40 50L35 45M40 50L45 45" stroke="white" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(59, 130, 246, 0.1); color: var(--info);">Automation</span>
+                    <h3 class="course-title">Worker Pipelines</h3>
+                    <p class="course-desc">Create automated workflows with Workers, Queues, Durable Objects, and cron
+                        triggers.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="0"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            4 weeks
+                        </div>
+                        <span class="course-progress">Start →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 5: Grant Writing Mastery -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <rect x="25" y="20" width="30" height="40" rx="3" fill="white" opacity="0.15" />
+                        <path d="M30 30H50M30 36H50M30 42H45" stroke="white" stroke-width="2.5"
+                            stroke-linecap="round" />
+                        <circle cx="55" cy="55" r="10" fill="white" />
+                        <path d="M55 50V55L58 57" stroke="#10B981" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--accent);">Nonprofit</span>
+                    <h3 class="course-title">Grant Writing Mastery</h3>
+                    <p class="course-desc">Write winning grant proposals with AI assistance, templates, and proven
+                        strategies.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="0"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            6 weeks
+                        </div>
+                        <span class="course-progress">Start →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 6: Foundation Directory -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="30" r="15" fill="white" opacity="0.15" />
+                        <path d="M40 20V40M30 30H50" stroke="white" stroke-width="3" stroke-linecap="round" />
+                        <rect x="25" y="50" width="30" height="8" rx="2" fill="white" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">Directory</span>
+                    <h3 class="course-title">Foundation Directory</h3>
+                    <p class="course-desc">Curated database of 500+ foundations, application tips, and success
+                        strategies.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="0"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Self-paced
+                        </div>
+                        <span class="course-progress">Start →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 7: Vercel Integration -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #000000, #333333);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <path d="M40 20L60 55H20L40 20Z" fill="white" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(0, 0, 0, 0.1); color: var(--text-primary);">Integration</span>
+                    <h3 class="course-title">Vercel + Cloudflare</h3>
+                    <p class="course-desc">Deploy Next.js apps on Vercel with Cloudflare's CDN and security layer.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="28"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            3 weeks
+                        </div>
+                        <span class="course-progress">28% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 8: GitHub CI/CD -->
+            <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #24292F, #1B1F23);">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="25" fill="white" opacity="0.15" />
+                        <path d="M40 30V50M30 40H50" stroke="white" stroke-width="4" stroke-linecap="round" />
+                        <circle cx="40" cy="30" r="4" fill="white" />
+                        <circle cx="40" cy="50" r="4" fill="white" />
+                        <circle cx="30" cy="40" r="4" fill="white" />
+                        <circle cx="50" cy="40" r="4" fill="white" />
+                    </svg>
+                </div>
+                <div class="course-content">
+                    <span class="course-label"
+                        style="background: rgba(36, 41, 47, 0.1); color: var(--text-primary);">DevOps</span>
+                    <h3 class="course-title">GitHub CI/CD</h3>
+                    <p class="course-desc">Automated deployments with GitHub Actions to Cloudflare Pages and Workers.
+                    </p>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: 0%;" data-progress="15"></div>
+                    </div>
+                    <div class="course-meta">
+                        <div class="course-duration">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M8 4V8L11 10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            4 weeks
+                        </div>
+                        <span class="course-progress">15% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user preferences and theme
+        let currentUser = null;
+        let userPreferences = null;
+
+        // Get current user
+        async function loadUser() {
+            try {
+                const response = await fetch('/api/auth/me');
+                const auth = await response.json();
+                if (auth.authenticated && auth.user) {
+                    currentUser = auth.user;
+                    await loadPreferences();
+                }
+            } catch (error) {
+                console.error('Failed to load user:', error);
+            }
+        }
+
+        // Load user preferences
+        async function loadPreferences() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch('/api/user/preferences');
+                if (response.ok) {
+                    userPreferences = await response.json();
+                    if (userPreferences.theme) {
+                        applyTheme(userPreferences.theme);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load preferences:', error);
+            }
+        }
+
+        // Save theme preference
+        async function saveTheme(theme) {
+            if (!currentUser) {
+                // Save to localStorage as fallback
+                localStorage.setItem('meauxlearn-theme', theme);
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/preferences', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...userPreferences,
+                        theme: theme
+                    })
+                });
+
+                if (response.ok) {
+                    userPreferences = await response.json();
+                }
+            } catch (error) {
+                console.error('Failed to save theme:', error);
+                // Fallback to localStorage
+                localStorage.setItem('meauxlearn-theme', theme);
+            }
+        }
+
+        // Theme Management
+        const themeSelect = document.getElementById('themeSelect');
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const themeIcon = document.getElementById('themeIcon');
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('meauxlearn-theme') || 'dark';
+            applyTheme(savedTheme);
+        }
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            themeSelect.value = theme;
+            updateThemeIcon(theme);
+        }
+
+        // Initialize theme
+        loadUser().then(() => {
+            const savedTheme = userPreferences?.theme || localStorage.getItem('meauxlearn-theme') || 'dark';
+            applyTheme(savedTheme);
+        });
+
+        // Theme select change
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            applyTheme(theme);
+            saveTheme(theme);
+        });
+
+        // Theme toggle (light/dark only)
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            let newTheme;
+
+            if (currentTheme === 'dark') {
+                newTheme = 'light';
+            } else if (currentTheme === 'light') {
+                newTheme = 'dark';
+            } else {
+                // If customize, toggle to dark
+                newTheme = 'dark';
+            }
+
+            applyTheme(newTheme);
+            saveTheme(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'light') {
+                themeIcon.innerHTML = '<path d="M7 0C7 3 5 5 3 7C5 9 7 11 7 14C7 11 9 9 11 7C9 5 7 3 7 0Z" fill="white"/>';
+            } else if (theme === 'customize') {
+                themeIcon.innerHTML = '<path d="M7 2L9 4L7 6M5 4L7 2L9 4M7 12L9 10L7 8M5 10L7 12L9 10" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+            } else {
+                themeIcon.innerHTML = '<circle cx="7" cy="7" r="4" fill="white"/>';
+            }
+        }
+
+        // Animate Stats
+        document.querySelectorAll('.stat-value[data-target]').forEach(el => {
+            const target = parseInt(el.getAttribute('data-target'));
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    el.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current);
+                }
+            }, 30);
+        });
+
+        // Animate Progress Bars
+        setTimeout(() => {
+            document.querySelectorAll('.progress-bar[data-progress]').forEach(bar => {
+                const progress = bar.getAttribute('data-progress');
+                bar.style.width = progress + '%';
+            });
+        }, 500);
+
+        // Chart.js Setup
+        const ctx = document.getElementById('progressChart');
+        const isDark = html.getAttribute('data-theme') === 'dark' || html.getAttribute('data-theme') === 'customize';
+
+        const chartData = {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [
+                {
+                    label: 'Course Completions',
+                    data: [12, 19, 15, 25, 22, 30, 28],
+                    borderColor: '#FF6B35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Active Students',
+                    data: [8, 15, 12, 18, 25, 22, 35],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        };
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: isDark ? '#F1F5F9' : '#111827',
+                            font: { family: 'Inter', size: 12, weight: '500' }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            color: isDark ? '#94A3B8' : '#6B7280',
+                            font: { family: 'Inter', size: 11 }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: isDark ? '#94A3B8' : '#6B7280',
+                            font: { family: 'Inter', size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update chart colors on theme change
+        function updateChartTheme() {
+            const newIsDark = html.getAttribute('data-theme') === 'dark' || html.getAttribute('data-theme') === 'customize';
+            chart.options.plugins.legend.labels.color = newIsDark ? '#F1F5F9' : '#111827';
+            chart.options.scales.y.grid.color = newIsDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+            chart.options.scales.y.ticks.color = newIsDark ? '#94A3B8' : '#6B7280';
+            chart.options.scales.x.ticks.color = newIsDark ? '#94A3B8' : '#6B7280';
+            chart.update();
+        }
+
+        themeSelect.addEventListener('change', () => {
+            setTimeout(updateChartTheme, 100);
+        });
+
+        themeToggle.addEventListener('click', () => {
+            setTimeout(updateChartTheme, 100);
+        });
+
+        // Chart Period Toggle
+        document.querySelectorAll('.chart-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

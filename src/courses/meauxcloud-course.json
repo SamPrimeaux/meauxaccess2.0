@@ -1,0 +1,452 @@
+{
+  "course": {
+    "id": "meauxcloud",
+    "name": "MeauxCloud",
+    "description": "Master Cloudflare: From Beginner to Software Development Expert",
+    "icon": "??",
+    "levels": [
+      {
+        "level": 1,
+        "name": "Beginner",
+        "description": "Learn the fundamentals of Cloudflare and cloud infrastructure",
+        "duration": "4-6 hours",
+        "modules": [
+          {
+            "id": "intro-cloudflare",
+            "title": "What is Cloudflare?",
+            "duration": "30 min",
+            "sections": [
+              {
+                "title": "Introduction to Cloudflare",
+                "content": "Cloudflare is a global network that makes everything you connect to the Internet secure, private, fast, and reliable. It acts as a reverse proxy, sitting between your visitors and your server, providing protection and optimization.",
+                "keyPoints": [
+                  "Cloudflare protects websites from attacks",
+                  "It speeds up websites through CDN (Content Delivery Network)",
+                  "Provides free SSL certificates",
+                  "Offers DDoS protection"
+                ]
+              },
+              {
+                "title": "Pros and Cons",
+                "content": "Understanding when to use Cloudflare and its limitations.",
+                "pros": [
+                  "Free SSL certificates",
+                  "DDoS protection included",
+                  "Global CDN for fast content delivery",
+                  "Free tier available",
+                  "Easy DNS management",
+                  "Built-in analytics",
+                  "Workers for serverless functions"
+                ],
+                "cons": [
+                  "Free tier has limitations",
+                  "Some advanced features require paid plans",
+                  "Learning curve for advanced features",
+                  "Cache can sometimes cause issues with dynamic content"
+                ]
+              },
+              {
+                "title": "Free vs Pro Plans",
+                "content": "Understanding the differences between Cloudflare's free and paid plans.",
+                "free": {
+                  "features": [
+                    "Unlimited bandwidth",
+                    "Free SSL certificates",
+                    "Basic DDoS protection",
+                    "Global CDN",
+                    "Workers (100,000 requests/day)",
+                    "R2 Storage (10GB free)",
+                    "D1 Database (5GB free)",
+                    "KV Storage (100MB free)"
+                  ],
+                  "limitations": [
+                    "Limited page rules (3)",
+                    "No image optimization",
+                    "Basic analytics",
+                    "No advanced security features"
+                  ]
+                },
+                "pro": {
+                  "features": [
+                    "Everything in Free, plus:",
+                    "20 page rules",
+                    "Image optimization",
+                    "Advanced analytics",
+                    "Better security features",
+                    "Priority support"
+                  ],
+                  "cost": "$20/month per domain"
+                }
+              }
+            ]
+          },
+          {
+            "id": "d1-databases",
+            "title": "Understanding D1 Databases",
+            "duration": "45 min",
+            "sections": [
+              {
+                "title": "What is D1?",
+                "content": "D1 is Cloudflare's serverless SQL database built on SQLite. It's designed to work seamlessly with Cloudflare Workers.",
+                "keyPoints": [
+                  "D1 is a SQLite-based database",
+                  "Serverless - no servers to manage",
+                  "Automatically scales",
+                  "Free tier: 5GB storage",
+                  "Works with Cloudflare Workers"
+                ]
+              },
+              {
+                "title": "D1 vs Traditional Databases",
+                "content": "How D1 differs from traditional database solutions.",
+                "comparison": {
+                  "d1": [
+                    "Serverless - no server management",
+                    "Global distribution",
+                    "SQLite compatible",
+                    "Free tier available",
+                    "Integrated with Workers"
+                  ],
+                  "traditional": [
+                    "Requires server management",
+                    "Single location",
+                    "More complex setup",
+                    "Ongoing costs",
+                    "Separate from application"
+                  ]
+                }
+              },
+              {
+                "title": "Creating Your First D1 Database",
+                "content": "Step-by-step guide to creating a D1 database.",
+                "steps": [
+                  "1. Go to Cloudflare Dashboard ? Workers & Pages ? D1",
+                  "2. Click 'Create database'",
+                  "3. Name your database",
+                  "4. Choose a location (closest to your users)",
+                  "5. Click 'Create'"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "queries-basics",
+            "title": "SQL Queries Basics",
+            "duration": "60 min",
+            "sections": [
+              {
+                "title": "What are Queries?",
+                "content": "A query is a request for data from a database. In SQL (Structured Query Language), queries let you retrieve, insert, update, or delete data.",
+                "keyPoints": [
+                  "SELECT - retrieve data",
+                  "INSERT - add new data",
+                  "UPDATE - modify existing data",
+                  "DELETE - remove data",
+                  "Queries are written in SQL"
+                ]
+              },
+              {
+                "title": "Basic SELECT Queries",
+                "content": "Learn how to retrieve data from your database.",
+                "examples": [
+                  {
+                    "query": "SELECT * FROM users;",
+                    "explanation": "Gets all columns from the users table"
+                  },
+                  {
+                    "query": "SELECT name, email FROM users WHERE id = 1;",
+                    "explanation": "Gets only name and email for user with id 1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "r2-storage",
+            "title": "R2 Object Storage",
+            "duration": "40 min",
+            "sections": [
+              {
+                "title": "What is R2?",
+                "content": "R2 is Cloudflare's object storage service, similar to AWS S3 but with no egress fees.",
+                "keyPoints": [
+                  "Store files, images, videos",
+                  "No egress fees (unlike S3)",
+                  "S3-compatible API",
+                  "Free tier: 10GB storage",
+                  "Works with Workers"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "name": "Vibe Coding",
+        "description": "Hands-on coding with Cloudflare Workers and APIs",
+        "duration": "8-10 hours",
+        "modules": [
+          {
+            "id": "wrangler-cli",
+            "title": "Wrangler CLI Mastery",
+            "duration": "90 min",
+            "sections": [
+              {
+                "title": "What is Wrangler?",
+                "content": "Wrangler is Cloudflare's command-line tool for deploying and managing Workers, D1 databases, R2 buckets, and more.",
+                "keyPoints": [
+                  "CLI tool for Cloudflare",
+                  "Deploy workers from terminal",
+                  "Manage secrets",
+                  "Test locally",
+                  "Deploy to production"
+                ]
+              },
+              {
+                "title": "Installing Wrangler",
+                "content": "How to install Wrangler on your system.",
+                "steps": [
+                  "npm install -g wrangler",
+                  "wrangler login",
+                  "Follow authentication steps"
+                ]
+              },
+              {
+                "title": "Essential Wrangler Commands",
+                "content": "Most important commands you'll use daily.",
+                "commands": [
+                  {
+                    "command": "wrangler deploy",
+                    "description": "Deploy your worker to Cloudflare"
+                  },
+                  {
+                    "command": "wrangler secret put SECRET_NAME",
+                    "description": "Set a secret (API key, password, etc.)"
+                  },
+                  {
+                    "command": "wrangler d1 execute DB_NAME --command 'SELECT * FROM table'",
+                    "description": "Run SQL query on D1 database"
+                  },
+                  {
+                    "command": "wrangler r2 object put BUCKET_NAME/object-key --file=file.txt",
+                    "description": "Upload file to R2 bucket"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "workers-basics",
+            "title": "Cloudflare Workers",
+            "duration": "120 min",
+            "sections": [
+              {
+                "title": "What are Workers?",
+                "content": "Workers are serverless functions that run on Cloudflare's edge network, close to your users.",
+                "keyPoints": [
+                  "Serverless - no servers to manage",
+                  "Runs on edge network",
+                  "Fast response times",
+                  "Free tier: 100,000 requests/day",
+                  "JavaScript/TypeScript support"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "resend-email",
+            "title": "Resend Email API",
+            "duration": "60 min",
+            "sections": [
+              {
+                "title": "What is Resend?",
+                "content": "Resend is a modern email API for developers. It makes sending transactional emails easy and reliable.",
+                "keyPoints": [
+                  "Simple API for sending emails",
+                  "Great deliverability",
+                  "Easy to integrate",
+                  "Free tier available",
+                  "Works with Workers"
+                ]
+              },
+              {
+                "title": "Setting Up Resend",
+                "content": "How to get started with Resend.",
+                "steps": [
+                  "1. Sign up at resend.com",
+                  "2. Get your API key",
+                  "3. Add domain",
+                  "4. Verify domain",
+                  "5. Start sending emails"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "openai-integration",
+            "title": "OpenAI & ChatGPT Integration",
+            "duration": "90 min",
+            "sections": [
+              {
+                "title": "What is OpenAI?",
+                "content": "OpenAI provides AI models like GPT-4, ChatGPT, and more for building intelligent applications.",
+                "keyPoints": [
+                  "GPT-4 for text generation",
+                  "ChatGPT for conversations",
+                  "Sora for video generation",
+                  "API-based access",
+                  "Pay per use"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "claude-integration",
+            "title": "Claude & Anthropic API",
+            "duration": "90 min",
+            "sections": [
+              {
+                "title": "What is Claude?",
+                "content": "Claude is Anthropic's AI assistant, similar to ChatGPT but with different strengths.",
+                "keyPoints": [
+                  "Claude 3.5 Sonnet - latest model",
+                  "Great for coding",
+                  "Long context windows",
+                  "API access available",
+                  "claude.ai for web interface"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "name": "Software Development",
+        "description": "Advanced development with Cloudflare ecosystem",
+        "duration": "12-15 hours",
+        "modules": [
+          {
+            "id": "ssh-remote",
+            "title": "SSH & Remote Applications",
+            "duration": "120 min",
+            "sections": [
+              {
+                "title": "What is SSH?",
+                "content": "SSH (Secure Shell) is a protocol for securely accessing remote computers over the internet. It's like a secure tunnel to another computer.",
+                "keyPoints": [
+                  "Secure remote access",
+                  "Encrypted connection",
+                  "Command-line interface",
+                  "File transfer capability",
+                  "Used for server management"
+                ]
+              },
+              {
+                "title": "How SSH Works",
+                "content": "Understanding the basics of SSH connections.",
+                "explanation": "SSH uses public/private key pairs for authentication. Your private key stays on your computer, and your public key goes on the server. When you connect, the server verifies your identity using these keys."
+              },
+              {
+                "title": "Using SSH Keys",
+                "content": "How to generate and use SSH keys for secure access.",
+                "steps": [
+                  "1. Generate key pair: ssh-keygen -t ed25519",
+                  "2. Copy public key to server",
+                  "3. Connect using: ssh user@server.com",
+                  "4. No password needed (uses keys)"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cloudflare-stream",
+            "title": "Cloudflare Stream",
+            "duration": "90 min",
+            "sections": [
+              {
+                "title": "What is Cloudflare Stream?",
+                "content": "Cloudflare Stream is a video platform that handles encoding, storage, and delivery of videos.",
+                "keyPoints": [
+                  "Automatic video encoding",
+                  "Global CDN delivery",
+                  "Adaptive bitrate streaming",
+                  "Player included",
+                  "Analytics built-in"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "api-integration",
+            "title": "API Integration Mastery",
+            "duration": "120 min",
+            "sections": [
+              {
+                "title": "What is an API?",
+                "content": "API (Application Programming Interface) is a way for different software to communicate with each other. Think of it as a menu at a restaurant - you order (request) and get food (response).",
+                "keyPoints": [
+                  "APIs let apps talk to each other",
+                  "REST APIs use HTTP requests",
+                  "JSON is common data format",
+                  "Authentication required",
+                  "Rate limits apply"
+                ]
+              },
+              {
+                "title": "Common APIs We Use",
+                "content": "APIs we'll integrate in this course.",
+                "apis": [
+                  {
+                    "name": "Cloudflare API",
+                    "purpose": "Manage Cloudflare resources",
+                    "auth": "API Token"
+                  },
+                  {
+                    "name": "OpenAI API",
+                    "purpose": "AI text generation",
+                    "auth": "API Key"
+                  },
+                  {
+                    "name": "Claude API",
+                    "purpose": "AI assistant",
+                    "auth": "API Key"
+                  },
+                  {
+                    "name": "Resend API",
+                    "purpose": "Send emails",
+                    "auth": "API Key"
+                  },
+                  {
+                    "name": "Google APIs",
+                    "purpose": "Various Google services",
+                    "auth": "OAuth or API Key"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "advanced-workers",
+            "title": "Advanced Workers Patterns",
+            "duration": "150 min",
+            "sections": [
+              {
+                "title": "Worker Architecture",
+                "content": "Building production-ready Workers applications.",
+                "topics": [
+                  "Error handling",
+                  "Rate limiting",
+                  "Caching strategies",
+                  "Database connections",
+                  "API routing"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

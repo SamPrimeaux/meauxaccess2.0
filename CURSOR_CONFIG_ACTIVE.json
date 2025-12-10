@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "cloudflare": {
+      "command": "node",
+      "args": [
+        "/Users/samprimeaux/cloudflare-mcp-bridge/bridge.js"
+      ],
+      "env": {
+        "CLOUDFLARE_MCP_URL": "https://meauxmcp.meauxbility.workers.dev/mcp"
+      }
+    }
+  }
+}

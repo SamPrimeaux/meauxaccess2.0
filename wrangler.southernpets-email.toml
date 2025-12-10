@@ -1,0 +1,50 @@
+# Southern Pets Animal Rescue - Email Template Worker
+# Standalone worker for email template management
+# Worker Name: southernpets-email-worker
+
+name = "southernpetsemailworker"
+main = "src/southernpets-email-worker.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat_v2"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "southernpetsanimalrescue"
+database_id = "f01e1fbb-01fb-4900-80e9-bbb90db51bbe"
+
+# Alternative binding name
+[[d1_databases]]
+binding = "SOUTHERNPETS_DB"
+database_name = "southernpetsanimalrescue"
+database_id = "f01e1fbb-01fb-4900-80e9-bbb90db51bbe"
+
+# R2 Buckets
+[[r2_buckets]]
+binding = "R2_SOUTHERNPETS"
+bucket_name = "southernpetsanimalrescue"
+
+[[r2_buckets]]
+binding = "R2_STORAGE"
+bucket_name = "southernpetsanimalrescue"
+
+# Environment Variables
+[vars]
+CLOUDFLARE_ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+CLOUDFLARE_IMAGES_ACCOUNT_HASH = "g7wf09fCONpnidkRnR_5vw"
+PRODUCTION_URL = "https://southernpetsanimalrescue.com"
+
+# Secrets (set via: wrangler secret put RESEND_API_KEY)
+# RESEND_API_KEY
+# CLOUDFLARE_API_TOKEN
+
+# Workers.dev URL will be:
+# https://southernpetsemailworker.meauxbility.workers.dev
+
+# Routes (optional - can be accessed via workers.dev URL)
+# routes = [
+#   { pattern = "email.southernpetsanimalrescue.com/*", zone_name = "southernpetsanimalrescue.com" }
+# ]

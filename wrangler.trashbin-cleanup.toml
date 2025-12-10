@@ -1,0 +1,21 @@
+name = "southernpets-trashbin-cleanup"
+main = "src/southernpets-trashbin-cleanup.ts"
+compatibility_date = "2024-11-24"
+compatibility_flags = ["nodejs_compat"]
+
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "southernpetsanimalrescue"
+# database_id will be set when you get it from Cloudflare Dashboard
+
+# R2 Trashbin Bucket
+[[r2_buckets]]
+binding = "R2_TRASHBIN_SOUTHERNPETS"
+bucket_name = "trashbinsouthernpets"
+
+# Scheduled trigger - Daily at 2 AM UTC
+[triggers]
+crons = ["0 2 * * *"]

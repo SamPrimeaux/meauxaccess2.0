@@ -1,0 +1,23 @@
+{
+  "name": "inneranimalmedia-router",
+  "version": "1.0.0",
+  "description": "Router for inneranimalmedia.com - serves Pages.dev at root and dashboard at /dashboard",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --env=production",
+    "deploy:prod": "wrangler deploy --env=production"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "router"
+  ],
+  "author": "Inner Animal Media",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.0.0"
+  }
+}

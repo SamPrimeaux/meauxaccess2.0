@@ -1,0 +1,22 @@
+name = "iaccess-router"
+main = "src/index.ts"
+compatibility_date = "2024-12-07"
+compatibility_flags = ["nodejs_compat"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# R2 Bucket Binding
+[[r2_buckets]]
+binding = "R2_IACCESS"
+bucket_name = "iaccess"
+
+# Environment Variables
+[vars]
+ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Routes (configure after deployment)
+# Add custom domain or use workers.dev subdomain
+
+# Secrets (set after deployment)
+# wrangler secret put CLOUDFLARE_API_TOKEN

@@ -1,0 +1,44 @@
+# Sandbox Worker Configuration
+# Client development and deployment environment
+
+name = "sandbox"
+main = "src/index.ts"
+compatibility_date = "2024-11-24"
+compatibility_flags = ["nodejs_compat"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Routes
+# Deployed to: sandbox.meauxbility.workers.dev
+# Custom domain: sandbox.iautodidact.org (optional)
+
+# D1 Databases (shared with main worker)
+[[d1_databases]]
+binding = "DB"
+database_name = "meauxstack-saas-db"
+database_id = "ee3e3adb-da99-457d-8c2c-390ff19f6435"
+
+# R2 Buckets (client-specific)
+[[r2_buckets]]
+binding = "R2_SANDBOX"
+bucket_name = "sandbox-storage"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "KV_SESSIONS"
+id = "3d059794619f4fb89c3ad7c4348dd780"
+
+[[kv_namespaces]]
+binding = "KV_CONFIG"
+id = "44096e435f5546fc8e1681eebbea48ce"
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "sandbox"
+CLOUDFLARE_ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# - CLOUDFLARE_API_TOKEN
+# - OPENAI_API_KEY (optional)
+# - RESEND_API_KEY (optional)

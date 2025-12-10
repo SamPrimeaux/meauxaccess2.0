@@ -1,0 +1,26 @@
+# Email Worker for sam@inneranimalmedia.com
+# Handles email archiving, filtering, and notifications
+
+name = "email-worker-sam"
+main = "src/email-worker-sam.ts"
+compatibility_date = "2024-11-24"
+compatibility_flags = ["nodejs_compat"]
+
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# R2 Bucket for email archiving
+[[r2_buckets]]
+binding = "EMAIL_ARCHIVE"
+bucket_name = "inneranimalmedia-email-archive"
+
+# KV Namespace for email logs
+[[kv_namespaces]]
+binding = "KV_EMAIL_LOGS"
+id = "9b768dd6fdf54229995c6f957dc45f6f"
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "production"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# - RESEND_API_KEY (for sending notifications)

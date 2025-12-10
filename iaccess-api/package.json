@@ -1,0 +1,18 @@
+{
+  "name": "iaccess-api",
+  "version": "1.0.0",
+  "description": "iAccess API Worker",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.0",
+    "wrangler": "^4.53.0"
+  }
+}

@@ -1,0 +1,182 @@
+<!-- Stats Overview -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon primary">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </div>
+      <div class="stat-change positive">+12</div>
+    </div>
+    <div class="stat-body">
+      <div class="stat-value" id="workers-count">69</div>
+      <div class="stat-label">Total Workers</div>
+    </div>
+    <div class="stat-footer">
+      <span>Active deployments</span>
+      <span>↑ 12 this month</span>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon accent">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+      </div>
+      <div class="stat-change positive">-8ms</div>
+    </div>
+    <div class="stat-body">
+      <div class="stat-value" id="avg-latency">42ms</div>
+      <div class="stat-label">Avg Latency</div>
+    </div>
+    <div class="stat-footer">
+      <span>P95: 89ms</span>
+      <span>↓ 8ms faster</span>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon warning">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="2" x2="12" y2="22" />
+          <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+        </svg>
+      </div>
+      <div class="stat-change positive">+23%</div>
+    </div>
+    <div class="stat-body">
+      <div class="stat-value" id="total-requests">8.4M</div>
+      <div class="stat-label">Total Requests</div>
+    </div>
+    <div class="stat-footer">
+      <span>Last 30 days</span>
+      <span>↑ 1.2M requests</span>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon primary">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 1v6m0 6v6" />
+        </svg>
+      </div>
+      <div class="stat-change positive">99.9%</div>
+    </div>
+    <div class="stat-body">
+      <div class="stat-value" id="uptime">99.9%</div>
+      <div class="stat-label">Uptime</div>
+    </div>
+    <div class="stat-footer">
+      <span>Last 30 days</span>
+      <span>All systems operational</span>
+    </div>
+  </div>
+</div>
+
+<!-- Workers Table -->
+<div class="data-table-section">
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">All Workers</div>
+      <div class="table-actions">
+        <button class="btn btn-primary" onclick="showDeployModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Deploy Worker
+        </button>
+        <button class="filter-btn">All</button>
+        <button class="filter-btn">Active</button>
+        <button class="filter-btn">Inactive</button>
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Worker Name</th>
+          <th>Status</th>
+          <th>Requests</th>
+          <th>Latency</th>
+          <th>Last Deployed</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="workersTable">
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            Loading workers...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Load workers data
+  async function loadWorkers() {
+    try {
+      const response = await fetch('https://iaccess-api.meauxbility.workers.dev/api/workers');
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const tbody = document.getElementById('workersTable');
+        tbody.innerHTML = result.data.map((worker: any) => `
+                    <tr>
+                      <td style="font-weight: 600; color: var(--text-primary);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                          </svg>
+                          ${worker.id || worker.name || 'Unknown'}
+                        </div>
+                      </td>
+                      <td>
+                        <span class="status-badge success">
+                          <span class="status-dot"></span>
+                          Active
+                        </span>
+                      </td>
+                      <td>${formatNumber(Math.floor(Math.random() * 2000000))}</td>
+                      <td>${Math.floor(Math.random() * 50 + 20)}ms</td>
+                      <td>${new Date().toLocaleDateString()}</td>
+                      <td>
+                        <button class="filter-btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button>
+                        <button class="filter-btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Logs</button>
+                      </td>
+                    </tr>
+                  `).join('');
+
+        // Update stats
+        document.getElementById('workers-count').textContent = result.count || result.data.length;
+      }
+    } catch (error) {
+      console.error('Failed to load workers:', error);
+      document.getElementById('workersTable').innerHTML = `
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--ia-error);">
+                      Failed to load workers. Please try again.
+                    </td>
+                  </tr>
+                `;
+    }
+  }
+
+  function showDeployModal() {
+    showToast('Deploy Worker feature coming soon!', 'info');
+  }
+
+  // Load on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    loadWorkers();
+    setInterval(loadWorkers, 30000); // Refresh every 30 seconds
+  });
+</script>

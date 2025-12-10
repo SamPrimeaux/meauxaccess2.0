@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "cloudflare": {
+      "url": "https://meauxmcp.meauxbility.workers.dev/mcp"
+    }
+  }
+}

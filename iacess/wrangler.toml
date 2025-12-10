@@ -1,0 +1,30 @@
+name = "iacess"
+main = "src/index.ts"
+compatibility_date = "2024-12-07"
+compatibility_flags = ["nodejs_compat"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# R2 Bucket Binding
+[[r2_buckets]]
+binding = "R2_IACCESS"
+bucket_name = "iaccess"
+
+# Environment Variables
+[vars]
+ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Custom Domain Routes
+# Add routes for inneranimalmedia.com
+# Note: Custom domains should be added via Cloudflare Dashboard for best results
+# Routes can be added here or via dashboard at:
+# https://dash.cloudflare.com/ede6590ac0d2fb7daf155b35653457b2/workers/routes
+
+# [[routes]]
+# pattern = "inneranimalmedia.com/*"
+# zone_id = "0bab48636c1bea4be4ea61c0c7787c3e"
+
+# [[routes]]
+# pattern = "www.inneranimalmedia.com/*"
+# zone_id = "0bab48636c1bea4be4ea61c0c7787c3e"

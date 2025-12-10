@@ -1,0 +1,150 @@
+# Wrangler configuration for meauxaccess-dashboard-production Worker
+# Production dashboard worker for Inner Animal Media
+# Dual theme: MeauxAccess (Purple) and iAccess (Teal/Orange)
+
+name = "meauxaccess-dashboard-production"
+main = "src/meauxaccess-dashboard.ts"
+compatibility_date = "2024-11-24"
+compatibility_flags = ["nodejs_compat"]
+
+# Account
+account_id = "ede6590ac0d2fb7daf155b35653457b2"
+
+# Routes
+# Deployed to: meauxaccess-dashboard-production.meauxbility.workers.dev
+# Preview URLs: *-meauxaccess-dashboard-production.meauxbility.workers.dev
+
+# Custom Domains (configure via Cloudflare Dashboard or wrangler)
+# inneranimalmedia.com
+# www.inneranimalmedia.com
+
+# D1 Databases
+[[d1_databases]]
+binding = "DB"
+database_name = "meauxstack-saas-db"
+database_id = "ee3e3adb-da99-457d-8c2c-390ff19f6435"
+
+[[d1_databases]]
+binding = "meauxxbility"
+database_name = "meauxbility-api-db"
+database_id = "49b16b7d-ecb9-4cc4-b337-559f94854757"
+
+[[d1_databases]]
+binding = "SAAS_DB"
+database_name = "meauxstack-saas-db"
+database_id = "ee3e3adb-da99-457d-8c2c-390ff19f6435"
+
+[[d1_databases]]
+binding = "MEAUX_WORK_DB"
+database_name = "meaux-work-db"
+database_id = "2a3a763a-92f1-4633-849e-268ddb31998f"
+
+[[d1_databases]]
+binding = "INNERANIMAL_DB"
+database_name = "inneranimalmedia-assets"
+database_id = "e0ec00b8-4e3c-422e-abba-70b7548c1f87"
+
+# R2 Buckets - Primary buckets
+[[r2_buckets]]
+binding = "R2_WEBSITE"
+bucket_name = "meauxbilityorgfinal"
+
+[[r2_buckets]]
+binding = "R2_COMPONENTS"
+bucket_name = "meauxstack-components"
+
+[[r2_buckets]]
+binding = "R2_RECORDINGS"
+bucket_name = "meauxbility-recordings"
+
+[[r2_buckets]]
+binding = "R2_3D_MODELS"
+bucket_name = "meauxbility-3d-models"
+
+[[r2_buckets]]
+binding = "R2_SPLINEICONS"
+bucket_name = "splineicons"
+
+[[r2_buckets]]
+binding = "R2_DOCS"
+bucket_name = "meauxbility-docs"
+
+[[r2_buckets]]
+binding = "R2_SAMI_BACKUPS"
+bucket_name = "samicloudbackups"
+
+[[r2_buckets]]
+binding = "R2_DEPLOY_VAULT"
+bucket_name = "meaux-deploy-vault"
+
+[[r2_buckets]]
+binding = "R2_AUTORAG"
+bucket_name = "autorag-meauxbility-chatbot"
+
+[[r2_buckets]]
+binding = "R2_CONNOR"
+bucket_name = "connor-mcneely"
+
+[[r2_buckets]]
+binding = "R2_FRED"
+bucket_name = "fred-williams"
+
+[[r2_buckets]]
+binding = "R2_AMBER"
+bucket_name = "amber-nicole"
+
+[[r2_buckets]]
+binding = "R2_ASSETS"
+bucket_name = "inneranimalmedia-assets"
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "meaux-work-storage"
+
+[[r2_buckets]]
+binding = "R2_IAUTODIDACT"
+bucket_name = "iautodidactorg"
+
+[[r2_buckets]]
+binding = "R2_MEAUXPHOTO"
+bucket_name = "meauxphoto-content"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "eed27546297b4b51b0a6e117d3316d3c"
+
+[[kv_namespaces]]
+binding = "KV_CONFIG"
+id = "44096e435f5546fc8e1681eebbea48ce"
+
+[[kv_namespaces]]
+binding = "KV_SESSIONS"
+id = "3d059794619f4fb89c3ad7c4348dd780"
+
+[[kv_namespaces]]
+binding = "KV_USERS"
+id = "40cc20516269415daf4c6bac0d9ff43a"
+
+[[kv_namespaces]]
+binding = "KV_NOTIFICATIONS"
+id = "6832e03107f2432f97d49de44f670ff5"
+
+# Environment Variables
+[vars]
+CLOUDFLARE_ACCOUNT_ID = "ede6590ac0d2fb7daf155b35653457b2"
+CLOUDFLARE_IMAGES_ACCOUNT_HASH = "g7wf09fCONpnidkRnR_5vw"
+CLOUDFLARE_STREAM_CUSTOMER_ID = "customer-8y3087qnrzz7ql2e.cloudflarestream.com"
+ENABLE_HEADER_INJECTION = "true"
+ENVIRONMENT = "production"
+PRODUCTION_URL = "https://www.inneranimalmedia.com"
+R2_ENDPOINT = "https://ede6590ac0d2fb7daf155b35653457b2.r2.cloudflarestorage.com"
+R2_PUBLIC_URL = "https://pub-b2c86021de114066bc2eefa2e0ee3250.r2.dev"
+TURN_TOKEN_ID = "d3d62f0405715d6c62565a4bc989218b"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# - CLOUDFLARE_API_TOKEN (for accessing Cloudflare API if needed)
+# - CLOUDFLARE_IMAGES_API_TOKEN (for Cloudflare Images API - use: D7SfwPBHfIOj4yn86jT1QVnr7KNHb6K5)
+# - OPENAI_API_KEY (for ChatGPT integration)
+# - RESEND_API_KEY (for email notifications)
+# - Any other sensitive credentials
