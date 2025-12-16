@@ -5,7 +5,11 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:deploy": "wrangler deploy --config wrangler.dev.toml",
+    "dev:local": "wrangler dev --config wrangler.dev.toml",
+    "dev:tail": "wrangler tail --config wrangler.dev.toml",
     "deploy": "wrangler deploy",
+    "deploy:prod": "wrangler deploy --config wrangler.meauxaccess-dashboard-production.toml",
     "tail": "wrangler tail"
   },
   "keywords": [

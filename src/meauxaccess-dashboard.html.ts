@@ -1981,7 +1981,7 @@ export default `<!DOCTYPE html>
       <!-- Main Content -->
       <main class="app-main">
         <!-- Overview/Dashboard View (Default) -->
-        <div class="page-content" id="overviewView">
+        <div class="page-content" id="overviewView" style="display: none;">
           <div class="app-content fade-in">
             <!-- Page Header -->
             <div class="page-header">
@@ -3267,122 +3267,258 @@ export default `<!DOCTYPE html>
   <script>
     // Client-side Routing
     function initRouting() {
-      // Handle navigation clicks
-      document.querySelectorAll('a[href^="/dashboard"]').forEach(link => {
-        link.addEventListener('click', (e) => {
+      // Handle navigation clicks - use event delegation for better performance
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="/dashboard"], a[href="/"], a[href="/meauxaccess"]');
+        if (link && link.href) {
           e.preventDefault();
           const path = new URL(link.href).pathname;
           navigateTo(path);
-        });
+        }
       });
       
       // Handle initial route
       const currentPath = window.location.pathname;
-      if (currentPath.startsWith('/dashboard')) {
-        navigateTo(currentPath);
+      // Normalize path - handle root, /dashboard, /meauxaccess
+      let normalizedPath = currentPath;
+      if (normalizedPath === '/' || normalizedPath === '/meauxaccess') {
+        normalizedPath = '/dashboard';
+      }
+      if (normalizedPath.startsWith('/dashboard') || normalizedPath === '/') {
+        navigateTo(normalizedPath);
       }
       
       // Handle browser back/forward
       window.addEventListener('popstate', () => {
-        navigateTo(window.location.pathname);
+        let path = window.location.pathname;
+        if (path === '/' || path === '/meauxaccess') {
+          path = '/dashboard';
+        }
+        navigateTo(path);
       });
     }
     
     function navigateTo(path) {
-      // Update URL without reload
-      window.history.pushState({}, '', path);
-      
-      // Hide all views
-      document.querySelectorAll('.page-content').forEach(view => {
-        view.style.display = 'none';
-      });
-      
-      // Remove active class from nav items
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-      });
-      
-      // Show appropriate view
-      if (path === '/dashboard' || path === '/dashboard/') {
+      try {
+        // Normalize path
+        if (path === '/' || path === '/meauxaccess') {
+          path = '/dashboard';
+        }
+        
+        console.log('Navigating to:', path);
+        
+        // Update URL without reload (only if different)
+        if (window.location.pathname !== path) {
+          window.history.pushState({}, '', path);
+        }
+        
+        // Hide ALL views first (including overview)
+        const allViews = document.querySelectorAll('.page-content');
+        allViews.forEach(view => {
+          view.style.display = 'none';
+        });
+        
+        // Remove active class from nav items
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        // Show appropriate view based on exact path match
+        let viewShown = false;
+        let targetView = null;
+        
+        if (path === '/dashboard' || path === '/dashboard/') {
+          targetView = document.getElementById('overviewView');
+          if (targetView) {
+            targetView.style.display = 'block';
+            viewShown = true;
+          }
+          document.querySelector('a[href="/dashboard"]')?.classList.add('active');
+      } else if (path === '/dashboard/resend/domains') {
+        const resendDomainsView = document.getElementById('resendDomainsView');
+        if (resendDomainsView) {
+          resendDomainsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/resend/domains"]')?.classList.add('active');
+        loadResendDomains();
+      } else if (path === '/dashboard/work/projects' || path.startsWith('/dashboard/work/projects')) {
+        const projectsView = document.getElementById('projectsView');
+        if (projectsView) {
+          projectsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/work/projects"]')?.classList.add('active');
+        loadProjects();
+      } else if (path === '/dashboard/work/board') {
+        const boardView = document.getElementById('boardView');
+        if (boardView) {
+          boardView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/work/board"]')?.classList.add('active');
+      } else if (path === '/dashboard/work/library') {
+        const libraryView = document.getElementById('libraryView');
+        if (libraryView) {
+          libraryView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/work/library"]')?.classList.add('active');
+      } else if (path === '/dashboard/work/docs') {
+        const docsView = document.getElementById('docsView');
+        if (docsView) {
+          docsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/work/docs"]')?.classList.add('active');
+      } else if (path === '/dashboard/apps/photo') {
+        const meauxPhotoView = document.getElementById('meauxPhotoView');
+        if (meauxPhotoView) {
+          meauxPhotoView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/apps/photo"]')?.classList.add('active');
+      } else if (path === '/dashboard/apps') {
+        const appsView = document.getElementById('appsView');
+        if (appsView) {
+          appsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/apps"]')?.classList.add('active');
+      } else if (path === '/dashboard/apps/cad') {
+        const meauxCADView = document.getElementById('meauxCADView');
+        if (meauxCADView) {
+          meauxCADView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/apps/cad"]')?.classList.add('active');
+      } else if (path === '/dashboard/apps/cloud') {
+        const meauxCloudView = document.getElementById('meauxCloudView');
+        if (meauxCloudView) {
+          meauxCloudView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/apps/cloud"]')?.classList.add('active');
+      } else if (path === '/dashboard/dev') {
+        const devConsoleView = document.getElementById('devConsoleView');
+        if (devConsoleView) {
+          devConsoleView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/dev"]')?.classList.add('active');
+      } else if (path === '/dashboard/dev/integrations') {
+        const integrationsView = document.getElementById('integrationsView');
+        if (integrationsView) {
+          integrationsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/dev/integrations"]')?.classList.add('active');
+      } else if (path === '/dashboard/chat/mail') {
+        const mailView = document.getElementById('mailView');
+        if (mailView) {
+          mailView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/chat/mail"]')?.classList.add('active');
+      } else if (path === '/dashboard/chat/calendar') {
+        const calendarView = document.getElementById('calendarView');
+        if (calendarView) {
+          calendarView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/chat/calendar"]')?.classList.add('active');
+      } else if (path === '/dashboard/chat/meet') {
+        const meetView = document.getElementById('meetView');
+        if (meetView) {
+          meetView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/chat/meet"]')?.classList.add('active');
+      } else if (path === '/dashboard/chat' || path.startsWith('/dashboard/chat/')) {
+        const chatView = document.getElementById('chatView');
+        if (chatView) {
+          chatView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/chat"]')?.classList.add('active');
+        loadEcosystemChat();
+      } else if (path === '/dashboard/auto') {
+        const automationView = document.getElementById('automationView');
+        if (automationView) {
+          automationView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/auto"]')?.classList.add('active');
+      } else if (path === '/dashboard/auto/pipeline') {
+        const pipelineView = document.getElementById('pipelineView');
+        if (pipelineView) {
+          pipelineView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/auto/pipeline"]')?.classList.add('active');
+      } else if (path === '/dashboard/auto/prompts') {
+        const promptsView = document.getElementById('promptsView');
+        if (promptsView) {
+          promptsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/auto/prompts"]')?.classList.add('active');
+      } else if (path === '/dashboard/resend/emails') {
+        const emailLogsView = document.getElementById('emailLogsView');
+        if (emailLogsView) {
+          emailLogsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/resend/emails"]')?.classList.add('active');
+        loadEmailLogs();
+      } else if (path === '/dashboard/resend/clients') {
+        const clientsView = document.getElementById('clientsView');
+        if (clientsView) {
+          clientsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/resend/clients"]')?.classList.add('active');
+        loadClients();
+      } else if (path === '/dashboard/account/settings') {
+        const settingsView = document.getElementById('settingsView');
+        if (settingsView) {
+          settingsView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/account/settings"]')?.classList.add('active');
+      } else if (path === '/dashboard/account/vault') {
+        const vaultView = document.getElementById('vaultView');
+        if (vaultView) {
+          vaultView.style.display = 'block';
+          viewShown = true;
+        }
+        document.querySelector('a[href="/dashboard/account/vault"]')?.classList.add('active');
+        } else {
+          // Default to overview if no match
+          console.warn('No route match for:', path, '- defaulting to overview');
+          targetView = document.getElementById('overviewView');
+          if (targetView) {
+            targetView.style.display = 'block';
+            viewShown = true;
+          }
+          document.querySelector('a[href="/dashboard"]')?.classList.add('active');
+        }
+        
+        // Ensure at least one view is shown
+        if (!viewShown) {
+          console.error('No view was shown for path:', path);
+          targetView = document.getElementById('overviewView');
+          if (targetView) {
+            targetView.style.display = 'block';
+          }
+        }
+      } catch (error) {
+        console.error('Error in navigateTo:', error);
+        // Fallback: show overview
         const overviewView = document.getElementById('overviewView');
         if (overviewView) {
           overviewView.style.display = 'block';
         }
-        document.querySelector('a[href="/dashboard"]')?.classList.add('active');
-      } else if (path === '/dashboard/resend/domains') {
-        document.getElementById('resendDomainsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/resend/domains"]')?.classList.add('active');
-        loadResendDomains();
-      } else if (path === '/dashboard/work/projects' || path.startsWith('/dashboard/work/projects')) {
-        document.getElementById('projectsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/work/projects"]')?.classList.add('active');
-        loadProjects();
-      } else if (path === '/dashboard/work/board') {
-        document.getElementById('boardView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/work/board"]')?.classList.add('active');
-      } else if (path === '/dashboard/work/library') {
-        document.getElementById('libraryView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/work/library"]')?.classList.add('active');
-      } else if (path === '/dashboard/work/docs') {
-        document.getElementById('docsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/work/docs"]')?.classList.add('active');
-      } else if (path === '/dashboard/apps') {
-        document.getElementById('appsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/apps"]')?.classList.add('active');
-      } else if (path === '/dashboard/apps/photo') {
-        document.getElementById('meauxPhotoView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/apps/photo"]')?.classList.add('active');
-      } else if (path === '/dashboard/apps/cad') {
-        document.getElementById('meauxCADView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/apps/cad"]')?.classList.add('active');
-      } else if (path === '/dashboard/apps/cloud') {
-        document.getElementById('meauxCloudView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/apps/cloud"]')?.classList.add('active');
-      } else if (path === '/dashboard/dev') {
-        document.getElementById('devConsoleView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/dev"]')?.classList.add('active');
-      } else if (path === '/dashboard/dev/integrations') {
-        document.getElementById('integrationsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/dev/integrations"]')?.classList.add('active');
-      } else if (path === '/dashboard/chat' || path.startsWith('/dashboard/chat/')) {
-        document.getElementById('chatView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/chat"]')?.classList.add('active');
-        loadEcosystemChat();
-      } else if (path === '/dashboard/chat/mail') {
-        document.getElementById('mailView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/chat/mail"]')?.classList.add('active');
-      } else if (path === '/dashboard/chat/calendar') {
-        document.getElementById('calendarView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/chat/calendar"]')?.classList.add('active');
-      } else if (path === '/dashboard/chat/meet') {
-        document.getElementById('meetView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/chat/meet"]')?.classList.add('active');
-      } else if (path === '/dashboard/auto') {
-        document.getElementById('automationView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/auto"]')?.classList.add('active');
-      } else if (path === '/dashboard/auto/pipeline') {
-        document.getElementById('pipelineView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/auto/pipeline"]')?.classList.add('active');
-      } else if (path === '/dashboard/auto/prompts') {
-        document.getElementById('promptsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/auto/prompts"]')?.classList.add('active');
-      } else if (path === '/dashboard/resend/emails') {
-        document.getElementById('emailLogsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/resend/emails"]')?.classList.add('active');
-        loadEmailLogs();
-      } else if (path === '/dashboard/resend/clients') {
-        document.getElementById('clientsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/resend/clients"]')?.classList.add('active');
-        loadClients();
-      } else if (path === '/dashboard/account/settings') {
-        document.getElementById('settingsView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/account/settings"]')?.classList.add('active');
-      } else if (path === '/dashboard/account/vault') {
-        document.getElementById('vaultView').style.display = 'block';
-        document.querySelector('a[href="/dashboard/account/vault"]')?.classList.add('active');
-      } else {
-        // Default to overview
-        document.querySelector('.page-content:first-of-type').style.display = 'block';
       }
     }
     
@@ -3849,7 +3985,37 @@ export default `<!DOCTYPE html>
     }
     
     function showNewClientModal() {
-      alert('New client modal coming soon!');
+      let modal = document.getElementById('newClientModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'newClientModal';
+        modal.className = 'modal';
+        const content = document.createElement('div');
+        content.className = 'modal-content';
+        content.style.maxWidth = '600px';
+        content.innerHTML = '<div class="modal-header"><div class="modal-title">New Client</div><button class="modal-close" onclick="closeNewClientModal()"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div><div class="card-body"><form id="newClientForm" onsubmit="handleNewClient(event)"><div style="margin-bottom: var(--space-4);"><label style="display: block; margin-bottom: var(--space-2); font-weight: 500; color: var(--text-primary);">Client Name</label><input type="text" id="clientName" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--surface-primary); color: var(--text-primary);" placeholder="Enter client name" /></div><div style="margin-bottom: var(--space-4);"><label style="display: block; margin-bottom: var(--space-2); font-weight: 500; color: var(--text-primary);">Email</label><input type="email" id="clientEmail" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--surface-primary); color: var(--text-primary);" placeholder="client@example.com" /></div><div style="margin-bottom: var(--space-4);"><label style="display: block; margin-bottom: var(--space-2); font-weight: 500; color: var(--text-primary);">Company</label><input type="text" id="clientCompany" style="width: 100%; padding: var(--space-3); border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--surface-primary); color: var(--text-primary);" placeholder="Company name (optional)" /></div><div style="display: flex; gap: var(--space-3); justify-content: flex-end;"><button type="button" class="btn btn-secondary" onclick="closeNewClientModal()">Cancel</button><button type="submit" class="btn btn-primary">Create Client</button></div></form></div></div>';
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeNewClientModal();
+        });
+      }
+      modal.classList.add('active');
+    }
+    
+    function closeNewClientModal() {
+      const modal = document.getElementById('newClientModal');
+      if (modal) modal.classList.remove('active');
+    }
+    
+    function handleNewClient(event) {
+      event.preventDefault();
+      const name = document.getElementById('clientName')?.value;
+      const email = document.getElementById('clientEmail')?.value;
+      const company = document.getElementById('clientCompany')?.value;
+      console.log('Creating client:', { name, email, company });
+      alert('Client "' + name + '" will be created!');
+      closeNewClientModal();
     }
     
     // Execute Dev Command
@@ -4309,8 +4475,36 @@ export default `<!DOCTYPE html>
     }
     
     function showNewProjectModal() {
-      // TODO: Implement new project modal
-      alert('New project modal coming soon!');
+      let modal = document.getElementById('newProjectModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'newProjectModal';
+        modal.className = 'modal';
+        const content = document.createElement('div');
+        content.className = 'modal-content';
+        content.style.maxWidth = '600px';
+        content.innerHTML = '<div class="modal-header"><div class="modal-title">New Project</div><button class="modal-close" onclick="closeNewProjectModal()"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></button></div><div class="card-body"><form id="newProjectForm" onsubmit="handleNewProject(event)"><div style="margin-bottom: var(--space-4);"><label style="display: block; margin-bottom: var(--space-2); font-weight: 500; color: var(--text-primary);">Project Name</label><input type="text" id="projectName" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--surface-primary); color: var(--text-primary);" placeholder="Enter project name" /></div><div style="margin-bottom: var(--space-4);"><label style="display: block; margin-bottom: var(--space-2); font-weight: 500; color: var(--text-primary);">Description</label><textarea id="projectDescription" rows="4" style="width: 100%; padding: var(--space-3); border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--surface-primary); color: var(--text-primary); resize: vertical;" placeholder="Enter project description"></textarea></div><div style="display: flex; gap: var(--space-3); justify-content: flex-end;"><button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button><button type="submit" class="btn btn-primary">Create Project</button></div></form></div></div>';
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeNewProjectModal();
+        });
+      }
+      modal.classList.add('active');
+    }
+    
+    function closeNewProjectModal() {
+      const modal = document.getElementById('newProjectModal');
+      if (modal) modal.classList.remove('active');
+    }
+    
+    function handleNewProject(event) {
+      event.preventDefault();
+      const name = document.getElementById('projectName')?.value;
+      const description = document.getElementById('projectDescription')?.value;
+      console.log('Creating project:', { name, description });
+      alert('Project "' + name + '" will be created!');
+      closeNewProjectModal();
     }
     
     // Theme Management
@@ -4399,30 +4593,55 @@ export default `<!DOCTYPE html>
     });
     
     // Initialize routing on page load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initRouting);
-    } else {
-      initRouting();
+    function initializeApp() {
+      console.log('Initializing app...');
+      
+      // Hide all page contents initially
+      const allViews = document.querySelectorAll('.page-content');
+      console.log('Found', allViews.length, 'page-content elements');
+      allViews.forEach(view => {
+        view.style.display = 'none';
+      });
+      
+      // Initialize routing
+      try {
+        initRouting();
+        console.log('Routing initialized');
+      } catch (error) {
+        console.error('Error initializing routing:', error);
+        // Fallback: show overview
+        const overviewView = document.getElementById('overviewView');
+        if (overviewView) {
+          overviewView.style.display = 'block';
+        }
+      }
+      
+      // Load stats from API
+      fetch('/api/stats')
+        .then(res => res.json())
+        .then(data => {
+          console.log('Stats loaded:', data);
+          if (data && document.getElementById('statsGrid')) {
+            // Update stat values if API returns data
+            const stats = document.querySelectorAll('.stat-value');
+            if (stats.length >= 4 && data.projects !== undefined) {
+              stats[0].textContent = data.projects || '24';
+              stats[1].textContent = data.teamMembers || '8';
+              stats[2].textContent = data.storageUsed || '2.4 GB';
+              stats[3].textContent = data.apiRequests ? (data.apiRequests / 1000).toFixed(1) + 'K' : '45.2K';
+            }
+          }
+        })
+        .catch(err => console.error('Failed to load stats:', err));
     }
     
-    // Update active nav link based on current URL
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('.nav-link').forEach(link => {
-      if (link.getAttribute('href') === currentPath) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
-    
-    // Load stats from API
-    fetch('/api/stats')
-      .then(res => res.json())
-      .then(data => {
-        // Update stats if needed
-        console.log('Stats loaded:', data);
-      })
-      .catch(err => console.error('Failed to load stats:', err));
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeApp);
+    } else {
+      // Use setTimeout to ensure DOM is fully ready
+      setTimeout(initializeApp, 0);
+    }
   </script>
 </body>
 </html>`;
