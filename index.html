@@ -799,7 +799,7 @@
       <nav class="sidebar-nav">
         <div class="nav-section">
           <div class="nav-section-title">Core Modules</div>
-          <a href="/dashboard/dashboard" class="nav-item">
+          <a href="#dashboard" class="nav-item">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
@@ -880,7 +880,7 @@
             </div>
             <span>MeauxPHOTO</span>
           </a>
-          <a href="/image-inventory.html" class="nav-item">
+          <a href="#image-inventory" class="nav-item">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
@@ -1548,6 +1548,46 @@
       }
     `;
     document.head.appendChild(style);
+
+    // Hash-based routing for SPA navigation
+    function handleHashRoute() {
+      const hash = window.location.hash.slice(1) || 'developer';
+      
+      // Update active nav item
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === `#${hash}`) {
+          item.classList.add('active');
+        }
+      });
+      
+      // Show appropriate content section
+      // For now, all sections are on the same page, so we just scroll or show relevant content
+      const targetElement = document.getElementById(hash);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Handle hash changes
+    window.addEventListener('hashchange', handleHashRoute);
+    
+    // Handle initial hash on load
+    window.addEventListener('load', () => {
+      handleHashRoute();
+    });
+
+    // Prevent default navigation for hash links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hash = link.getAttribute('href');
+        if (hash) {
+          window.location.hash = hash;
+          handleHashRoute();
+        }
+      });
+    });
 
     // Initialize on load
     init();

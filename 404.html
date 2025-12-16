@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - Developer Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: #F8F9FA;
+      color: #0A0A0A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      max-width: 500px;
+    }
+    h1 {
+      font-size: 72px;
+      font-weight: 700;
+      color: #FF6B35;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #0A0A0A;
+    }
+    p {
+      font-size: 16px;
+      color: #495057;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #FF6B35;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    a:hover {
+      background: #E85D00;
+    }
+  </style>
+  <script>
+    // Auto-redirect after 3 seconds
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
+    <p>The page you're looking for doesn't exist. You'll be redirected to the dashboard in a few seconds.</p>
+    <a href="/">Go to Dashboard</a>
+  </div>
+</body>
+</html>
+
