@@ -98,6 +98,7 @@ export default {
       if (isMeauxbility && path === '/') {
         return Response.redirect(url.origin + '/dashboard', 302);
       }
+      // For dev worker, always serve dashboard (no domain-specific logic)
       // All /dashboard/* routes serve the same HTML (client-side routing handles it)
       return new Response(MEAUXACCESS_HTML, {
         headers: {
