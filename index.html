@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>Developer Dashboard - MeauxStack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      /* Light Theme - High Contrast, iOS Quality */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8F9FA;
+      --bg-elevated: #FFFFFF;
+      --bg-hover: #F1F3F5;
+      --bg-active: #E9ECEF;
+
+      /* Text - High Contrast */
+      --text-primary: #0A0A0A;
+      --text-secondary: #495057;
+      --text-tertiary: #6C757D;
+      --text-inverse: #FFFFFF;
+
+      /* Accent - Meauxbility Brand */
+      --accent-primary: #FF6B35;
+      --accent-secondary: #339999;
+      --accent-hover: #E85D00;
+      --accent-light: rgba(255, 107, 53, 0.1);
+
+      /* Borders */
+      --border-light: #E9ECEF;
+      --border-medium: #DEE2E6;
+      --border-strong: #ADB5BD;
+
+      /* Status */
+      --status-online: #10B981;
+      --status-offline: #6C757D;
+      --status-warning: #F59E0B;
+      --status-error: #EF4444;
+
+      /* Shadows - Subtle, iOS-like */
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+      /* Spacing - 8px grid */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+
+      /* Typography */
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+
+      /* Sidebar */
+      --sidebar-width: 280px;
+      --header-height: 64px;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .app-container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ============================================
+       SIDEBAR
+       ============================================ */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-elevated);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar-header {
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 800;
+      font-size: 1.125rem;
+      color: var(--text-primary);
+    }
+
+    .sidebar-logo-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-logo-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: var(--space-md);
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: var(--space-xl);
+    }
+
+    .nav-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-sm);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 2px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--accent-light);
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--accent-primary);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      padding: 2px 8px;
+      background: var(--accent-primary);
+      color: var(--text-inverse);
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg-secondary);
+    }
+
+    /* ============================================
+       TOP HEADER
+       ============================================ */
+    .top-header {
+      height: var(--header-height);
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-light);
+      padding: 0 var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+
+    .header-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-online);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .header-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    .header-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    /* ============================================
+       PAGE CONTENT
+       ============================================ */
+    .page-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-xl);
+    }
+
+    .page-hero {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .page-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .page-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .page-actions {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-strong);
+    }
+
+    /* ============================================
+       MODULES GRID
+       ============================================ */
+    .modules-section {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .modules-header {
+      margin-bottom: var(--space-lg);
+    }
+
+    .modules-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .modules-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .module-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: var(--space-lg);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .module-card:hover {
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .module-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .module-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .module-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--border-light);
+    }
+
+    .module-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--accent-primary);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .module-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .module-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .module-code {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+      background: var(--bg-secondary);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .module-description {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       AI CONNECTORS SECTION
+       ============================================ */
+    .ai-connectors {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .connectors-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+    }
+
+    .connectors-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .connector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .connector-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: var(--space-lg);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .connector-card:hover {
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .connector-card.connected {
+      border-color: var(--status-online);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .connector-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .connector-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-light);
+    }
+
+    .connector-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .connector-info {
+      flex: 1;
+    }
+
+    .connector-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .connector-status {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
+
+    .connector-status.connected {
+      color: var(--status-online);
+      font-weight: 600;
+    }
+
+    .connector-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .connector-btn {
+      flex: 1;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-medium);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .connector-btn:hover {
+      background: var(--bg-hover);
+    }
+
+    .connector-btn.primary {
+      background: var(--accent-primary);
+      color: var(--text-inverse);
+      border-color: var(--accent-primary);
+    }
+
+    .connector-btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ============================================
+       AI CHAT INTERFACE
+       ============================================ */
+    .ai-chat-panel {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: var(--space-lg);
+      margin-bottom: var(--space-2xl);
+      display: none;
+    }
+
+    .ai-chat-panel.active {
+      display: block;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .chat-provider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .chat-messages {
+      min-height: 400px;
+      max-height: 600px;
+      overflow-y: auto;
+      margin-bottom: var(--space-md);
+      padding: var(--space-md);
+      background: var(--bg-secondary);
+      border-radius: 8px;
+    }
+
+    .chat-input-area {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      resize: none;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .chat-send {
+      padding: 12px 24px;
+      background: var(--accent-primary);
+      color: var(--text-inverse);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chat-send:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .modules-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+    }
+
+    /* ============================================
+       SCROLLBAR
+       ============================================ */
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: var(--border-strong);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span>MeauxStack</span>
+        </div>
+        <button class="header-btn" onclick="toggleSidebar()" style="display: none;" id="sidebarToggle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Core Modules</div>
+          <a href="/dashboard/dashboard" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+            <span>Dashboard</span>
+          </a>
+          <a href="#meauxwork" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
+                <path d="M3 10H21" stroke="currentColor" stroke-width="2" />
+                <path d="M8 4V10" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+            <span>MeauxWork</span>
+            <span class="nav-badge">24</span>
+          </a>
+          <a href="#meauxstats" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M21 10V3H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxStats</span>
+          </a>
+          <a href="#meauxteam" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                <path
+                  d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path
+                  d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span>MeauxTeam</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Content & Media</div>
+          <a href="#meauxdoc" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span>MeauxDOC</span>
+          </a>
+          <a href="#meauxphoto" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2" />
+                <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxPHOTO</span>
+          </a>
+          <a href="/image-inventory.html" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2" />
+                <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxMemories</span>
+          </a>
+          <a href="#meauxmedia" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2" />
+                <path d="M2 10L12 15L22 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxMedia</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Infrastructure</div>
+          <a href="#meauxcloud" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M18 10H16.74C16.3659 8.551 15.2145 7.32397 13.7081 6.72348C12.2017 6.12299 10.5144 6.20473 9.06158 6.95149C7.60879 7.69824 6.52372 9.04473 6.09299 10.6719C5.66225 12.299 5.92151 14.0698 6.80786 15.5299C7.69421 16.99 9.13119 18.0081 10.776 18.3051C12.4208 18.6022 14.1214 18.1523 15.39 17.07"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M18 10L21 13L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M21 13H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxCloud</span>
+          </a>
+          <a href="#meauxcad" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3.27 6.96L12 12L20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M12 22.08V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>MeauxCAD</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">AI & Development</div>
+          <a href="#developer" class="nav-item active">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  stroke="currentColor" stroke-width="2" />
+                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span>Developer Tools</span>
+          </a>
+          <a href="#ai-connectors" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span>AI Connectors</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Settings</div>
+          <a href="#preferences" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                <path
+                  d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span>Preferences</span>
+          </a>
+          <a href="#billing" class="nav-item">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="2" />
+                <path d="M1 10H23" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+            <span>Billing</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- TOP HEADER -->
+      <div class="top-header">
+        <div class="header-left">
+          <h1 class="header-title">Developer Dashboard</h1>
+          <div class="header-status">
+            <div class="status-dot"></div>
+            <span>System Online</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" onclick="toggleTheme()" title="Toggle theme">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+              <path
+                d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class="header-btn" onclick="toggleSidebar()" id="mobileSidebarToggle" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- PAGE CONTENT -->
+      <div class="page-content">
+        <!-- Hero Section -->
+        <div class="page-hero">
+          <h1 class="page-title">Developer Workspace</h1>
+          <p class="page-subtitle">
+            Unified development environment with AI-powered assistance. Connect your AI tools, manage deployments, and
+            build faster.
+          </p>
+          <div class="page-actions">
+            <button class="btn btn-primary" onclick="openAIChat('openai')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" />
+              </svg>
+              Start AI Chat
+            </button>
+            <button class="btn btn-secondary" onclick="showConnectorModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2 17L12 22L22 17" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M2 12L12 17L22 12" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Add Connector
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Connectors Section -->
+        <div class="ai-connectors">
+          <div class="connectors-header">
+            <h2 class="connectors-title">AI Connectors</h2>
+            <button class="btn btn-secondary" onclick="showConnectorModal()">+ Add Connector</button>
+          </div>
+          <div class="connector-grid" id="connectorGrid">
+            <!-- Connectors will be populated here -->
+          </div>
+        </div>
+
+        <!-- AI Chat Panel -->
+        <div class="ai-chat-panel" id="aiChatPanel">
+          <div class="chat-header">
+            <div class="chat-provider">
+              <div class="connector-icon" id="chatProviderIcon"></div>
+              <div>
+                <div class="connector-name" id="chatProviderName">Select an AI provider</div>
+                <div class="connector-status" id="chatProviderStatus">Not connected</div>
+              </div>
+            </div>
+            <button class="header-btn" onclick="closeAIChat()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6L18 18" stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; color: var(--text-tertiary); padding: var(--space-xl);">
+              Select an AI provider to start chatting
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <textarea class="chat-input" id="chatInput" placeholder="Ask your AI assistant..." rows="3"></textarea>
+            <button class="chat-send" onclick="sendAIMessage()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Developer Modules -->
+        <div class="modules-section">
+          <div class="modules-header">
+            <h2 class="modules-title">Developer Modules</h2>
+            <p class="modules-description">Tools and integrations for development workflows</p>
+          </div>
+          <div class="modules-grid" id="developerModules">
+            <!-- Modules will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connector Modal -->
+  <div id="connectorModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 12px; padding: var(--space-xl); max-width: 500px; width: 90%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+        <h2 style="font-size: 1.5rem; font-weight: 700;">Add AI Connector</h2>
+        <button onclick="closeConnectorModal()"
+          style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+      </div>
+      <div id="connectorForm">
+        <div style="margin-bottom: var(--space-md);">
+          <label style="display: block; font-weight: 600; margin-bottom: var(--space-sm);">Provider</label>
+          <select id="connectorProvider"
+            style="width: 100%; padding: 12px; border: 1px solid var(--border-medium); border-radius: 8px; font-size: 0.9375rem;">
+            <option value="">Select provider...</option>
+            <option value="openai">OpenAI (ChatGPT)</option>
+            <option value="claude">Anthropic (Claude)</option>
+            <option value="gemini">Google (Gemini)</option>
+            <option value="cursor">Cursor AI</option>
+          </select>
+        </div>
+        <div style="margin-bottom: var(--space-md);">
+          <label style="display: block; font-weight: 600; margin-bottom: var(--space-sm);">API Key</label>
+          <input type="password" id="connectorApiKey" placeholder="Enter your API key"
+            style="width: 100%; padding: 12px; border: 1px solid var(--border-medium); border-radius: 8px; font-size: 0.9375rem; font-family: var(--font-mono);">
+        </div>
+        <div style="margin-bottom: var(--space-md);">
+          <label style="display: block; font-weight: 600; margin-bottom: var(--space-sm);">Name (optional)</label>
+          <input type="text" id="connectorName" placeholder="My ChatGPT"
+            style="width: 100%; padding: 12px; border: 1px solid var(--border-medium); border-radius: 8px; font-size: 0.9375rem;">
+        </div>
+        <div style="display: flex; gap: var(--space-md); justify-content: flex-end;">
+          <button class="btn btn-secondary" onclick="closeConnectorModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveConnector()">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // AI Connectors Data
+    let aiConnectors = JSON.parse(localStorage.getItem('aiConnectors') || '[]');
+    let currentChatProvider = null;
+
+    // Available AI Providers
+    const aiProviders = {
+      openai: {
+        name: 'OpenAI (ChatGPT)',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"/></svg>`,
+        color: '#10A37F'
+      },
+      claude: {
+        name: 'Anthropic (Claude)',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        color: '#D97757'
+      },
+      gemini: {
+        name: 'Google (Gemini)',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6V12L16 14" stroke-linecap="round"/></svg>`,
+        color: '#4285F4'
+      },
+      cursor: {
+        name: 'Cursor AI',
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3L21 21M21 3L3 21" stroke-linecap="round"/></svg>`,
+        color: '#6366F1'
+      }
+    };
+
+    // Developer Modules
+    const developerModules = [
+      { code: 'MX-WK', name: 'MeauxWork', desc: 'Project overview dashboard', icon: 'work' },
+      { code: 'MX-ST', name: 'MeauxStats', desc: 'Analytics and metrics', icon: 'stats' },
+      { code: 'MX-CL', name: 'MeauxCloud', desc: 'Cloud storage management', icon: 'cloud' },
+      { code: 'MX-CD', name: 'MeauxCAD', desc: '3D design workspace', icon: 'cad' },
+      { code: 'CI', name: 'CI/CD', desc: 'Deployment pipeline', icon: 'cicd' },
+      { code: 'DK', name: 'Docker', desc: 'Container management', icon: 'docker' },
+      { code: 'K8', name: 'Kubernetes', desc: 'Orchestration', icon: 'k8s' },
+      { code: 'SE', name: 'Security', desc: 'Security audit tools', icon: 'security' }
+    ];
+
+    // Initialize
+    function init() {
+      renderConnectors();
+      renderDeveloperModules();
+      setupEventListeners();
+    }
+
+    // Render AI Connectors
+    function renderConnectors() {
+      const grid = document.getElementById('connectorGrid');
+      if (!grid) return;
+
+      // Add default connectors if none exist
+      if (aiConnectors.length === 0) {
+        grid.innerHTML = `
+          <div class="connector-card" onclick="showConnectorModal()" style="border-style: dashed; border-color: var(--border-medium); background: var(--bg-secondary);">
+            <div style="text-align: center; padding: var(--space-lg);">
+              <div style="font-size: 2rem; margin-bottom: var(--space-md);">+</div>
+              <div style="font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-sm);">Add AI Connector</div>
+              <div style="font-size: 0.875rem; color: var(--text-secondary);">Connect ChatGPT, Claude, Gemini, or Cursor</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = aiConnectors.map((connector, index) => {
+        const provider = aiProviders[connector.provider];
+        return `
+          <div class="connector-card ${connector.connected ? 'connected' : ''}">
+            <div class="connector-header">
+              <div class="connector-icon" style="background: ${provider.color}20; border-color: ${provider.color}40;">
+                ${provider.icon}
+              </div>
+              <div class="connector-info">
+                <div class="connector-name">${connector.name || provider.name}</div>
+                <div class="connector-status ${connector.connected ? 'connected' : ''}">
+                  ${connector.connected ? 'Connected' : 'Not connected'}
+                </div>
+              </div>
+            </div>
+            <div class="connector-actions">
+              <button class="connector-btn ${connector.connected ? '' : 'primary'}" onclick="${connector.connected ? `openAIChat('${connector.provider}', ${index})` : `connectAI(${index})`}">
+                ${connector.connected ? 'Chat' : 'Connect'}
+              </button>
+              <button class="connector-btn" onclick="removeConnector(${index})">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('') + `
+        <div class="connector-card" onclick="showConnectorModal()" style="border-style: dashed; border-color: var(--border-medium); background: var(--bg-secondary); cursor: pointer;">
+          <div style="text-align: center; padding: var(--space-lg);">
+            <div style="font-size: 2rem; margin-bottom: var(--space-md); color: var(--text-tertiary);">+</div>
+            <div style="font-weight: 600; color: var(--text-primary);">Add Connector</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Developer Modules
+    function renderDeveloperModules() {
+      const grid = document.getElementById('developerModules');
+      if (!grid) return;
+
+      grid.innerHTML = developerModules.map(module => `
+        <div class="module-card" onclick="openModule('${module.code}')">
+          <div class="module-header">
+            <div class="module-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                ${getModuleIconSVG(module.icon)}
+              </svg>
+            </div>
+            <div class="module-info">
+              <div class="module-name">
+                ${module.name}
+                <span class="module-code">/${module.code}</span>
+              </div>
+              <div class="module-description">${module.desc}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Get Module Icon SVG
+    function getModuleIconSVG(type) {
+      const icons = {
+        work: '<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor"/><path d="M3 10H21" stroke="currentColor"/><path d="M8 4V10" stroke="currentColor"/>',
+        stats: '<path d="M3 3V21H21" stroke="currentColor" stroke-linecap="round"/><path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 10V3H14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>',
+        cloud: '<path d="M18 10H16.74C16.3659 8.551 15.2145 7.32397 13.7081 6.72348C12.2017 6.12299 10.5144 6.20473 9.06158 6.95149C7.60879 7.69824 6.52372 9.04473 6.09299 10.6719C5.66225 12.299 5.92151 14.0698 6.80786 15.5299C7.69421 16.99 9.13119 18.0081 10.776 18.3051C12.4208 18.6022 14.1214 18.1523 15.39 17.07" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 10L21 13L18 16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 13H12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>',
+        cad: '<path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.27 6.96L12 12L20.73 6.96" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22.08V12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>',
+        cicd: '<path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+        docker: '<path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2"/><path d="M8 10H10M14 10H16M9 14H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+        k8s: '<path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+        security: '<path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/><path d="M12 8V12M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      };
+      return icons[type] || icons.work;
+    }
+
+    // Show Connector Modal
+    function showConnectorModal() {
+      document.getElementById('connectorModal').style.display = 'flex';
+    }
+
+    // Close Connector Modal
+    function closeConnectorModal() {
+      document.getElementById('connectorModal').style.display = 'none';
+      document.getElementById('connectorProvider').value = '';
+      document.getElementById('connectorApiKey').value = '';
+      document.getElementById('connectorName').value = '';
+    }
+
+    // Save Connector
+    function saveConnector() {
+      const provider = document.getElementById('connectorProvider').value;
+      const apiKey = document.getElementById('connectorApiKey').value;
+      const name = document.getElementById('connectorName').value;
+
+      if (!provider || !apiKey) {
+        alert('Please select a provider and enter an API key');
+        return;
+      }
+
+      // Save to localStorage (in production, this would be encrypted and stored securely)
+      const connector = {
+        provider,
+        apiKey, // In production, encrypt this!
+        name: name || aiProviders[provider].name,
+        connected: false,
+        createdAt: new Date().toISOString()
+      };
+
+      aiConnectors.push(connector);
+      localStorage.setItem('aiConnectors', JSON.stringify(aiConnectors));
+
+      // Test connection
+      connectAI(aiConnectors.length - 1);
+
+      closeConnectorModal();
+      renderConnectors();
+    }
+
+    // Connect AI
+    async function connectAI(index) {
+      const connector = aiConnectors[index];
+      if (!connector) return;
+
+      try {
+        // Test API key by making a simple request
+        const testResponse = await testAIConnection(connector.provider, connector.apiKey);
+
+        if (testResponse.success) {
+          connector.connected = true;
+          connector.lastConnected = new Date().toISOString();
+          localStorage.setItem('aiConnectors', JSON.stringify(aiConnectors));
+          renderConnectors();
+          alert(`${aiProviders[connector.provider].name} connected successfully!`);
+        } else {
+          throw new Error(testResponse.error || 'Connection failed');
+        }
+      } catch (error) {
+        alert(`Failed to connect: ${error.message}`);
+      }
+    }
+
+    // Test AI Connection
+    async function testAIConnection(provider, apiKey) {
+      try {
+        const response = await fetch(`/api/ai/${provider}/test`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({ test: true })
+        });
+
+        return await response.json();
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    }
+
+    // Remove Connector
+    function removeConnector(index) {
+      if (confirm('Are you sure you want to remove this connector?')) {
+        aiConnectors.splice(index, 1);
+        localStorage.setItem('aiConnectors', JSON.stringify(aiConnectors));
+        renderConnectors();
+      }
+    }
+
+    // Open AI Chat
+    function openAIChat(provider, connectorIndex = null) {
+      let connector = null;
+
+      if (connectorIndex !== null) {
+        connector = aiConnectors[connectorIndex];
+      } else {
+        // Find first connected connector for this provider
+        connector = aiConnectors.find(c => c.provider === provider && c.connected);
+      }
+
+      if (!connector) {
+        alert('Please connect an AI provider first');
+        showConnectorModal();
+        return;
+      }
+
+      currentChatProvider = connector;
+      const providerInfo = aiProviders[provider];
+
+      document.getElementById('chatProviderIcon').innerHTML = providerInfo.icon;
+      document.getElementById('chatProviderName').textContent = connector.name || providerInfo.name;
+      document.getElementById('chatProviderStatus').textContent = 'Connected';
+      document.getElementById('chatProviderStatus').classList.add('connected');
+      document.getElementById('aiChatPanel').classList.add('active');
+      document.getElementById('chatMessages').innerHTML = '<div style="text-align: center; color: var(--text-tertiary); padding: var(--space-xl);">Start a conversation...</div>';
+    }
+
+    // Close AI Chat
+    function closeAIChat() {
+      document.getElementById('aiChatPanel').classList.remove('active');
+      currentChatProvider = null;
+    }
+
+    // Send AI Message
+    async function sendAIMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+
+      if (!message || !currentChatProvider) return;
+
+      const messagesDiv = document.getElementById('chatMessages');
+
+      // Add user message
+      messagesDiv.innerHTML += `
+        <div style="margin-bottom: var(--space-md); text-align: right;">
+          <div style="display: inline-block; background: var(--accent-primary); color: white; padding: var(--space-sm) var(--space-md); border-radius: 12px; max-width: 70%;">
+            ${message}
+          </div>
+        </div>
+      `;
+
+      input.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      // Show loading
+      const loadingId = 'loading-' + Date.now();
+      messagesDiv.innerHTML += `
+        <div id="${loadingId}" style="margin-bottom: var(--space-md);">
+          <div style="display: inline-block; background: var(--bg-hover); padding: var(--space-sm) var(--space-md); border-radius: 12px;">
+            <div style="display: flex; gap: 4px;">
+              <div style="width: 8px; height: 8px; background: var(--text-tertiary); border-radius: 50%; animation: bounce 1s infinite;"></div>
+              <div style="width: 8px; height: 8px; background: var(--text-tertiary); border-radius: 50%; animation: bounce 1s infinite 0.2s;"></div>
+              <div style="width: 8px; height: 8px; background: var(--text-tertiary); border-radius: 50%; animation: bounce 1s infinite 0.4s;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Send to API
+      try {
+        const response = await fetch(`/api/ai/${currentChatProvider.provider}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentChatProvider.apiKey}`
+          },
+          body: JSON.stringify({
+            message,
+            conversation: getConversationHistory()
+          })
+        });
+
+        const data = await response.json();
+
+        // Remove loading
+        document.getElementById(loadingId).remove();
+
+        // Add AI response
+        messagesDiv.innerHTML += `
+          <div style="margin-bottom: var(--space-md);">
+            <div style="display: inline-block; background: var(--bg-elevated); border: 1px solid var(--border-light); padding: var(--space-sm) var(--space-md); border-radius: 12px; max-width: 70%;">
+              ${data.response || data.message || 'No response received'}
+            </div>
+          </div>
+        `;
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (error) {
+        document.getElementById(loadingId).remove();
+        messagesDiv.innerHTML += `
+          <div style="margin-bottom: var(--space-md); color: var(--status-error);">
+            Error: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Get Conversation History
+    function getConversationHistory() {
+      // In production, maintain conversation history
+      return [];
+    }
+
+    // Open Module
+    function openModule(code) {
+      console.log('Open module:', code);
+      // Navigate to module page
+    }
+
+    // Toggle Sidebar (Mobile)
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Toggle Theme
+    function toggleTheme() {
+      // Theme toggle functionality
+      console.log('Toggle theme');
+    }
+
+    // Setup Event Listeners
+    function setupEventListeners() {
+      // Enter key to send message
+      document.getElementById('chatInput')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendAIMessage();
+        }
+      });
+
+      // Click outside modal to close
+      document.getElementById('connectorModal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'connectorModal') {
+          closeConnectorModal();
+        }
+      });
+
+      // Responsive sidebar toggle
+      if (window.innerWidth <= 1024) {
+        document.getElementById('mobileSidebarToggle').style.display = 'block';
+        document.getElementById('sidebarToggle').style.display = 'block';
+      }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 1024) {
+          document.getElementById('mobileSidebarToggle').style.display = 'block';
+          document.getElementById('sidebarToggle').style.display = 'block';
+        } else {
+          document.getElementById('mobileSidebarToggle').style.display = 'none';
+          document.getElementById('sidebarToggle').style.display = 'none';
+          document.getElementById('sidebar').classList.remove('open');
+        }
+      });
+    }
+
+    // Add loading animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); opacity: 1; }
+        50% { transform: translateY(-4px); opacity: 0.7; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize on load
+    init();
+  </script>
+</body>
+
+</html>
